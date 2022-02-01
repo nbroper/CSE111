@@ -9,30 +9,61 @@ d.	plural	past
 e.	plural	present
 f.	plural	future
 """
-number = -1
-option = ""
 
+words = ""
+nouns = ""
+#verbs = ""
 
 def main():
-    
-    word = get_determiner(number)
-    noun = get_noun(number)
-    verb = get_verb(number, option)
 
-    print(f"{word} {noun} {verb}. ")
+    quantity = -1
+    tense = ""
 
-
-def get_quantity(number):
     numbers = [1, 2]
     quantity = random.choice(numbers)
-    return number
 
-def get_tense():
+    options = ["past", "present", "future"]
+    tense = random.choice(options)
 
-     options = ["past", "present", "future"]
-     option = random.choice(options)
-     return option
-    
+    word = get_determiner(quantity)
+    noun = get_noun(quantity)
+    verb = get_verb(quantity, tense)
+
+    print(f" {word.capitalize()} {noun} {verb}. ")
+
+    # for _ in range(7):
+
+    #     word = get_determiner(1)
+    #     noun = get_noun(1)
+    #     verb = get_verb(1, "past")
+    #     print(f" {word.capitalize()} {noun} {verb}. ")
+
+    #     word = get_determiner(1)
+    #     noun = get_noun(1)
+    #     verb = get_verb(1, "present")
+    #     print(f" {word.capitalize()} {noun} {verb}. ")
+
+    #     word = get_determiner(1)
+    #     noun = get_noun(1)
+    #     verb = get_verb(1, "future")
+    #     print(f" {word.capitalize()} {noun} {verb}. ")
+
+    #     word = get_determiner(2)
+    #     noun = get_noun(2)
+    #     verb = get_verb(2, "past")
+        # print(f" {word.capitalize()} {noun} {verb}. ")
+
+    # word5 = get_determiner(2)
+    # noun5 = get_noun(2)
+    # verb5 = get_verb(2, "present")
+    # print(f" {word.capitalize()} {noun} {verb}. ")
+
+    # word6 = get_determiner(2)
+    # noun6 = get_noun(2)
+    # verb6 = get_verb(2, "future")
+    # print(f" {word.capitalize()} {noun} {verb}. ")
+
+  
 def get_determiner(quantity):
      """Return a randomly chosen determiner. A determiner is
         a word like "the", "a", "one", "two", "some", "many".
@@ -83,6 +114,7 @@ def get_noun(quantity):
      return noun
 
 def get_verb(quantity, tense):
+     verbs = ""
      """Return a randomly chosen verb. If tense is "past",
      this function will return one of these ten verbs:
      "drank", "ate", "grew", "laughed", "thought",
@@ -113,12 +145,12 @@ def get_verb(quantity, tense):
             "ran", "slept", "talked", "walked", "wrote"]
      
      elif tense == ("present" and quantity == 1):
-            verbs = ["drinks", "eats", "grows", "laughs", "thinks",
-            "runs", "sleeps", "talks", "walks", "writes"]
-     
-     elif tense == ("present" and quantity != 1):
             verbs = ["drink", "eat", "grow", "laugh", "think",
             "run", "sleep", "talk", "walk", "write"]
+     
+     elif tense == ("present" and quantity != 1):
+            verbs = ["drinks", "eats", "grows", "laughs", "thinks",
+            "runs", "sleeps", "talks", "walks", "writes"]
      
      elif tense == "future":
             verbs = ["will drink", "will eat", "will grow", "will laugh",
