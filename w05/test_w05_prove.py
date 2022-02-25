@@ -1,4 +1,4 @@
-from w05_prove import get_determiner, get_noun, get_verb
+from w05_prove import get_determiner, get_noun, get_verb, get_preposition, get_prepositional_phrase
 import random
 import pytest
 
@@ -61,49 +61,76 @@ def test_get_noun():
         assert noun in plural_nouns
 ###########################################################################################################
 def test_get_verb():
-
-    tenses = ["past", "present", "future"]
-    
-    for _ in range(4):
-        
-        tense = get_verb(1) 
-        assert tense in tenses
-    
+ 
     past_verbs = ["drank", "ate", "grew", "laughed", "thought",
      "ran", "slept", "talked", "walked", "wrote"]
-
-    for _ in range(11):
-
-        #quantity = random.randint(2,11)
-        verb = get_verb(1)
-        assert verb in past_verbs
 
     single_present_verbs = ["drink", "eat", "grow", "laugh", "think",
             "run", "sleep", "talk", "walk", "write"]
 
-    for _ in range(11):
-
-        #quantity = random.randint(2,11)
-        verb = get_verb(1)
-        assert verb in single_present_verbs        
-
     plural_present_verbs = ["drinks", "eats", "grows", "laughs", "thinks",
             "runs", "sleeps", "talks", "walks", "writes"]
-
-    for _ in range(11):
-
-        quantity = random.randint(2,11)
-        verb = get_verb(quantity)
-        assert verb in plural_present_verbs
 
     future_verbs = ["will drink", "will eat", "will grow", "will laugh",
             "will think", "will run", "will sleep", "will talk",
             "will walk", "will write"]
 
-    for _ in range(11):
+    # for _ in range(6):
+         
+    #     #assert get_verb in single_present_verbs
 
-        quantity = random.randint(2,11)
-        verb = get_verb(quantity)
-        assert verb in future_verbs
+    #     verb = get_verb(quantity, tense)
+    #     assert verb in plural_present_verbs
+    for _ in range(3):
+            
+        #sets quantity randomly for single or plural
+        quantity = random.randint(1, 10)
+        tense = random.choice(['past', 'present', 'future'])
+
+        if tense == 'past':
+            assert get_verb(quantity, tense) in past_verbs
+
+        elif tense == 'present' and quantity == 1:
+            assert get_verb(quantity, tense) in single_present_verbs
+
+        elif tense == 'present' and quantity != 1:
+            assert get_verb(quantity, tense) in plural_present_verbs
+
+        else:
+            assert get_verb(quantity, tense) in future_verbs
+
+
+#################################################################################
+
+def test_get_preposition():
+
+    prepositions = ["about", "above", "across", "after", "along",
+        "around", "at", "before", "behind", "below",
+        "beyond", "by", "despite", "except", "for",
+        "from", "in", "into", "near", "of",
+        "off", "on", "onto", "out", "over",
+        "past", "to", "under", "with", "without"]
+
+    for _ in range(15):
+    
+        preposition = random.choice(prepositions)
+        assert get_preposition in prepositions
+
+###################################################################################
+
+def test_get_prepositional_phrase():
+
+    quantity = random.randint(1, 10)
+    words = 3
+
+    for _ in range(10):
+
+        list = get_prepositional_phrase(quantity)
+        word_list = list.split()
+        number_of_words = len(word_list.split())
+        assert number_of_words in words
+
+        
+
 
 pytest.main(["-v", "--tb=line", "-rN", __file__])   
