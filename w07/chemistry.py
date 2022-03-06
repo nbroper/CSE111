@@ -1,14 +1,12 @@
-
+from pytest import approx
 
 def main():
     
-    
-
     # Get a chemical formula for a molecule from the user.
     formula = input("Enter the molecular formula of the sample: ")
 
     # Get the mass of a chemical sample in grams from the user.
-    mass = input("Enter the mass in grams of the sample: ")
+    massg = float(input("Enter the mass in grams of the sample: "))
 
     # Call the make_periodic_table function and
     # store the periodic table in a variable.
@@ -18,21 +16,22 @@ def main():
     # chemical formula given by the user to a compound
     # list that stores element symbols and the quantity
     # of atoms of each element in the molecule.
-    parse_formula()
+    symbol_quantity_list = parse_formula(formula, periodic_table_dict)
 
     # Call the compute_molar_mass function to compute the
     # molar mass of the molecule from the compound list.
-    compute_molar_mass()
-    
+    total_mass = compute_molar_mass(symbol_quantity_list, periodic_table_dict)
+    moles = massg / total_mass
     # Compute the number of moles in the sample.
-
+    ##molarmass = (massg / mass)
     # Print the molar mass.
-
-    # Print the number of moles.    
+    print(f'{total_mass:.5f} grams/mole')
+    # Print the number of moles.
+    print(f'{moles:.5f} moles')
 #######################################################################    
 def make_periodic_table():
 
-    periodic_table_dict= {
+    periodic_table_dict = {
     #[symbol, name, atomic_mass]
     "Ac":	["Actinium",	227],
     "Ag":	["Silver",	107.8682],
@@ -263,16 +262,14 @@ def compute_molar_mass(symbol_quantity_list, periodic_table_dict):
         # Multiply the atomic mass by the quantity.
         # Add the product into the total mass.
 
-    for compound in symbol_quantity_list():
-        symbol = compound[SYMBOL_INDEX]
-        quantity = compound[QUANTITY_INDEX]
-
-        symbol_info = periodic_table_dict[symbol]
-        symbol_mass = symbol_info[ATOMIC_MASS_INDEX]
-        total_mass = quantity * symbol_mass
-
-
-
+    total_mass = 0
+    for key, value in symbol_quantity_list:
+        symbols = key
+        quantity = value
+        chem_symbol = periodic_table_dict[symbols]
+        mole_weight = chem_symbol[1] * quantity
+        total_mass += mole_weight
+       
     # Return the total mass.
     return total_mass
 ####################################################################### 
@@ -280,9 +277,3 @@ def compute_molar_mass(symbol_quantity_list, periodic_table_dict):
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
