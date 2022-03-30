@@ -1,8 +1,16 @@
+#https://byui-cse.github.io/cse111-course/lesson09/prove.html
 import csv
+from datetime import datetime
 
-PRODUCT_NUM_INDEX = 0
-QUANTITY_INDEX = 1
+KEY_INDEX = 0
+NAME_INDEX = 1
+PRICE_INDEX = 2
 
+product_list = {}
+request = {}
+quantity_list = []
+subtotal_list = []
+tax_rate = 0.06
 
 def main():
     """
@@ -15,32 +23,36 @@ def main():
     Use the requested product number to find the corresponding item in the products_dict.
     Print the product name, requested quantity, and product price.
     """
+    try:
     
-    PRODUCT_NUM_INDEX = 0
-    NAME_INDEX = 1
-    PRICE_INDEX = 2
-    
-    products_dict = read_dict("products.csv", PRODUCT_NUM_INDEX)
-
-    print(f"Products {products_dict} ")
-
-    #read file into a list
-    with open("request.csv", "rt") as request_file:
-
-        reader = csv.reader(request_file)
-        next(reader)
-
-        for row_list in reader:
-
-            product = row_list[PRODUCT_NUM_INDEX]
-            quantity = int(row_list[QUANTITY_INDEX])
-            #price = float(row_list[PRICE_INDEX])
-            product = row_list
+        #print name of the store
+        print("Nate's Corner Store")
+        
+        #read file into a list
+        read_dict("products.csv", KEY_INDEX)
             
+            
+        with open("request.csv", "rt") as request_file:
+            reader = csv.reader(request_file)
+            next(reader)
+            print(" ")
+            for line in reader:
+                key = line[0]
+                quantity = line[1]
+                products = list(product_list[key])
+                print(f'{products[0]}: {quantity} @ {products[1]}')
+        print(" ")
 
-            print(product, quantity)
-     
+        get_totals()
+        date()
+    
+    except FileNotFoundError as file_not_found_err:
+        print("Error: missing file ")
+        print("file_not_found_err")
 
+    except KeyError as key_err:
+        print("Error: unknown product ID in the request.csv file")
+        print(type(key_err).__name__, key_err)
 
 def read_dict(filename, KEY_COLUMN_INDEX):
     """Read the contents of a CSV file into a compound
@@ -53,8 +65,6 @@ def read_dict(filename, KEY_COLUMN_INDEX):
     Return: a compound dictionary that contains
         the contents of the CSV file.
     """
-    dictionary = {}
-
     with open(filename, "rt") as csv_file:
         reader = csv.reader(csv_file)
         #skip first line of csv file
@@ -62,19 +72,50 @@ def read_dict(filename, KEY_COLUMN_INDEX):
 
         #for current row get product number, name, and price
         for row in reader:
+            key = row[KEY_COLUMN_INDEX]
+            product_list[key] = row
+            product_list[key].pop(0)
+            print(f'{key} {product_list}')
+        
+    return product_list
 
-            product_number = row[KEY_COLUMN_INDEX] 
-            name = row[1]
-            price = float(row[2])
+def get_totals():
+    with open("request.csv", "rt") as request_file:
+        reader = csv.reader(request_file)
+        next(reader)
+        for line in reader:
+            quantity = int(line[1])
+            quantity_list.append(quantity)
             
-            #store the data in the dictionary
-            dictionary[product_number] = [name, price]
+    #number of items
+    total_items = (sum(quantity_list)) 
+    print(f"Number of Items: {total_items} ")
+    
+    with open("request.csv", "rt") as request_file:
+        reader = csv.reader(request_file)
+        next(reader)
+        for line in reader:
+            key = line[0]
+            quantity = float(line[1])
+            products = list(product_list[key])
+            subtotal = quantity * float(products[1])
+            subtotal_list.append(subtotal)
+            final_subtotal = sum(subtotal_list)
+            tax = final_subtotal * tax_rate
+            total = tax + final_subtotal
 
+        #subtotal
+        print(f"Subtotal: {subtotal} ")
+        #sales tax
+        print(f"Sales Tax: {tax:.2f}")
+        #total
+        print(f"Total: {total:.2f}")
+        print(" ")
+        print("Thanks for shopping at Nate's Corner Store. ")
 
-            # key = row_list[KEY_COLUMN_INDEX]
-            # dictionary[key] = row_list
-
-    return dictionary
+def date():
+    current_date_and_time = datetime.now()
+    print(f"{current_date_and_time:%c} ")
 
 if __name__ == "__main__":
     main()
